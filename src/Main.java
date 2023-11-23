@@ -7,6 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
 
+        System.out.println("test");
         Scanner scanner = new Scanner(System.in);
         User[] users = new User[0];
         User user = new User();
