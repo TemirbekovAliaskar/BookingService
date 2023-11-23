@@ -5,77 +5,114 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-
         Scanner scanner = new Scanner(System.in);
         User[] users = new User[0];
         User user = new User();
         User currentUser = null;
         Managment managment = new Managment();
-        CarsInfo carsInfo = new CarsInfo();
 
 
         while (true) {
+
             System.out.println("""
-                    1.Регистрация
-                    2.Войти
-                    3.Выйти
+                    ╔═══════════════════════════════════╗
+                    ║           Добро пожаловать        ║
+                    ║              в компанию           ║
+                    ║   MAN - Meder,Aliaskar,Nurtaazin  ║
+                    ╠───────────────────────────────────╣
+                    ║          1. Регистрация           ║
+                    ║          2. Войти                 ║
+                    ║          3. Admin                 ║
+                    ║          4. Выход                 ║
+                    ╚═══════════════════════════════════╝
                     """);
+
 
             String choice = scanner.nextLine();
             switch (choice) {
-                case "1":
+                case "1": {
                     User registerNewUser = user.register();
                     users = Arrays.copyOf(users, users.length + 1);
                     users[users.length - 1] = registerNewUser;
                     break;
+                }
 
 
-                case "2":
+                    case "2": {
                     currentUser = user.login(users);
                     if (currentUser != null) {
                         System.out.println("Вход выполнен успешно!");
-                        Car newCar = carsInfo.info();
 
-                        System.out.println("Машины :");
-                        if (newCar != null) {
-                            if (!newCar.isBooked()) {
-                                BigDecimal carPrice = newCar.getPrice();
+                        carWhile:
+                        while (true) {
+                            Car newCar = Car.info();
+                            if (newCar == null) break carWhile;
+                            else {
 
-                                if (currentUser.getBigDecimal().compareTo(carPrice) >= 0) {
+                                if (!newCar.isBooked()) {
+                                    BigDecimal carPrice = newCar.getPrice();
 
-                                    newCar.book();
+                                    if (currentUser.getBigDecimal().compareTo(carPrice) >= 0) {
+                                        newCar.book();
 
-                                    System.out.println("Вы выбрали машину: " + newCar.getCarsModel());
-                                    System.out.println("Цена: " + newCar.getPrice());
-                                    System.out.println("Водитель: " + newCar.getDriver().getDriverSurname()
-                                            + " " + newCar.getDriver().getDrivername());
+                                        System.out.println("Водитель: " + newCar.getDriver().getDriverSurname()
+                                                + " " + newCar.getDriver().getDrivername());
+
+                                        currentUser.balance(carPrice, currentUser, managment, scanner);
+
+                                    } else {
+                                        System.out.println("Недостаточно средств для покупки машины.");
+                                        currentUser.balance(carPrice, currentUser, managment, scanner);
+                                    }
+
                                 } else {
-                                    System.out.println("Недостаточно средств для покупки машины.");
-                                    currentUser.balance(carPrice, currentUser,managment,scanner);
+                                    System.out.println("Извините, машина уже забронирована.");
                                 }
-                            } else {
-                                System.out.println("Извините, машина уже забронирована.");
                             }
                         }
-                    } else {
-                        System.out.println("Ошибка входа. Пожалуйста, проверьте логин и пароль.");
                     }
                     break;
 
+                    }
 
+
+                case "3": {
+                    innerLoop:
+                    while (true) {
+                        if (managment.admin()) {
+                            System.out.println("ADMINISTRATOR VIEW:\n");
+
+                            System.out.println("CARS INFORMATION:");
+                            managment.carsInfo(managment.getCars());
+
+                            System.out.println("-------------------------");
+
+                            System.out.println("DRIVERS INFORMATION:");
+                            managment.driverInfo(managment.getDrivers());
+
+                            System.out.println("--------------------------");
+
+                            System.out.println("USERS INFORMATION:");
+                            managment.userInfo(users);
+
+                            System.out.println("BANK INFORMATION:");
+                            managment.bank();
+                        } else {
+                            break innerLoop;
+                        }
+                    }
+                }
+
+                case "4": {
+                    System.out.println("Выход из программы.");
+                    System.exit(0);
+                }
+
+                default: {
+                    System.out.println("Некорректный выбор. Повторите ввод.");
+                    break;
+                }
             }
-
-
         }
-
     }
 }
-
-
-//    private static User[] addUserToArray(User[] users, User newUser) {
-//        users = Arrays.copyOf(users, users.length + 1);
-//        users[users.length - 1] = newUser;
-//        return users;
-//    }
-//}
