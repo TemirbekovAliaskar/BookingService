@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Driver {
 
     private String drivername;
@@ -22,5 +24,12 @@ public class Driver {
 
     public void setDriverSurname(String driverSurname) {
         this.driverSurname = driverSurname;
+    }
+
+    @Override
+    public String toString() {
+
+        return "║   Driver Name   : " + drivername + "    Driver Surname: " + driverSurname + "\n";
+
     }
 }

@@ -13,13 +13,18 @@ public class User {
     private BigDecimal bigDecimal;
 
 
+    public Scanner getScanner() {
+        return scanner;
+    }
 
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
+    }
 
+    public User() {
+    }
 
-
-    public User(){}
-
-    public User(String name, String lastName, String address, String number, String login, String password,BigDecimal bigDecimal) {
+    public User(String name, String lastName, String address, String number, String login, String password, BigDecimal bigDecimal) {
         this.name = name;
         this.lastName = lastName;
         this.address = address;
@@ -88,48 +93,64 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", address='" + address + '\'' +
-                ", number='" + number + '\'' +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ",Bank :" + bigDecimal         +'}';
+        return "USER INFORMATION:\n" +
+                "  - NAME: " + name +
+                "  - LAST NAME: " + lastName +
+                "  - ADDRESS: " + address+
+                "  - PHONE NUMBER: " + number+
+                "  - LOGIN: " + login +
+                "  - PASSWORD: " + password +
+                "  - BANK: " + bigDecimal;
     }
-//
+
+    //
     Scanner scanner = new Scanner(System.in);
-    public User register (){
+
+    public User register() {
         User user = new User();
-        System.out.print("Атынызды жазыныз :");
+
+        System.out.println("""
+                ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+                ┃ Регистрация пользователя        ┃
+                ┠─────────────────────────────────┨
+                """);
+
+        System.out.print("  Атынызды жазыныз: ");
         user.setName(scanner.nextLine());
-        System.out.print("Фамилянызды жазыныз :");
+
+        System.out.print("  Фамилиянызды жазыныз: ");
         user.setLastName(scanner.nextLine());
-        System.out.print("Аддрести жазаныз : ");
+
+        System.out.print("  Адрес: ");
         user.setAddress(scanner.nextLine());
-        System.out.print("Номеринизди бериниз :");
+
+        System.out.print("  Номер телефона: ");
         user.setNumber(scanner.nextLine());
+
         user.setLogin(emailTrue());
         user.setPassword(passTrue());
-        System.out.print("Balance толуктаныз 💶 :");
+
+        System.out.print("  Баланс: ");
         user.setBigDecimal(scanner.nextBigDecimal());
 
-
+        System.out.println("""
+                ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                """);
 
         return user;
     }
 
 
-    public User login(User [] users){
+    public User login(User[] users) {
 
         User user1 = new User();
         user1.setLogin(emailTrue());
         user1.setPassword(passTrue());
 
-        for (int i = 0; i < users.length ; i++) {
+        for (int i = 0; i < users.length; i++) {
 
-            if (users [i].getLogin().equals(user1.getLogin()) && users[i].getPassword().equals(user1.getPassword())){
-                System.out.println("Welcome  !" + users[i].getName()+ " " + users[i].getLastName());
+            if (users[i].getLogin().equals(user1.getLogin()) && users[i].getPassword().equals(user1.getPassword())) {
+                System.out.println("Welcome  !" + users[i].getName() + " " + users[i].getLastName());
                 return users[i];
 
             }
@@ -137,130 +158,80 @@ public class User {
         return null;
     }
 
-    public String emailTrue(){
+
+    public String emailTrue() {
 
         Scanner scanner1 = new Scanner(System.in);
         boolean isTrue = false;
 
         String login = "";
-        while (!isTrue){
+        while (!isTrue) {
             System.out.println("Email login жаз :");
             login = scanner1.nextLine();
-            if (login.endsWith("@gmail.com")){
+            if (login.endsWith("@gmail.com")) {
                 isTrue = true;
-            }
-            else System.err.println("@gmail.com жетишсиз!");
+            } else System.err.println("@gmail.com жетишсиз!");
         }
         return login;
     }
 
-    public String passTrue(){
+    public String passTrue() {
         Scanner scanner1 = new Scanner(System.in);
         boolean istrue = false;
-        String password  = "";
+        String password = "";
 
-        while (!istrue){
+        while (!istrue) {
             System.out.println("Пароль жаз");
             password = scanner1.nextLine();
-            if (password.length() > 4){
+            if (password.length() > 4) {
                 istrue = true;
-            }
-            else System.err.println("4 тон жогору болсун парольунуз !");
+            } else System.err.println("4 тон жогору болсун парольунуз !");
         }
         return password;
 
     }
 
 
-
     public void balance(BigDecimal amount, User currentUser, Managment management, Scanner scanner) {
-
-        if (bigDecimal.compareTo(amount) >= 0) {
-            bigDecimal = bigDecimal.subtract(amount);
-            System.out.println("Новый баланс: " + bigDecimal);
-            System.out.println("Ваша машина успешно забронирована!");
+        if (currentUser.getBigDecimal().compareTo(amount) >= 0) {
+            currentUser.setBigDecimal(currentUser.getBigDecimal().subtract(amount));
+            System.out.println("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+            System.out.println("  Новый баланс: " + currentUser.getBigDecimal());
+            System.out.println("  Ваша машина успешно забронирована!");
+            System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
         } else {
-            BigDecimal creditAmount = amount.subtract(bigDecimal);
-
             System.out.println("""
-            Кредит берете ?
-            1. Yes
-            2. No
-            """);
-            System.out.println("Ваш выбор ?");
+                    ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+                    │  Кредит берете?                     │
+                    │  1. Да                              │
+                    │  2. Нет                             │
+                    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                    """);
+            System.out.println("  Ваш выбор ?");
+
             switch (scanner.nextLine()) {
                 case "1": {
-                    System.out.println("Введите сумму :");
+                    System.out.println("  Введите сумму кредита:");
                     BigDecimal requestedCredit = scanner.nextBigDecimal();
+                    scanner.nextLine();
                     management.creditCar(currentUser, requestedCredit);
                     break;
                 }
                 case "2": {
-                    System.out.println("Хорошо!");
+                    System.out.println("  Хорошо!");
                     break;
                 }
                 default: {
-                    System.out.println("Некорректный выбор.");
+                    System.out.println("  Некорректный выбор.");
                     break;
                 }
             }
 
-            if (bigDecimal.compareTo(amount) >= 0) {
-                bigDecimal = bigDecimal.subtract(amount);
-                System.out.println("Новый баланс: " + bigDecimal);
-                System.out.println("Ваша машина успешно забронирована!");
-            } else {
-                System.out.println("Недостаточно средств, даже после взятия кредита.");
-            }
 
-
-
-
-
-
-//    public void balance(BigDecimal amount,User currentUser) {
-//
-//        if (bigDecimal.compareTo(amount) >= 0) {
-//            bigDecimal = bigDecimal.subtract(amount);
-//            System.out.println("Новый баланс: " + bigDecimal);
-//            System.out.println("Ваша машина успешно забронирована!");
-//        } else {
-//            BigDecimal creditAmount = amount.subtract(bigDecimal);
-//
-//
-//            System.out.println("""
-//                Кредит берете ?
-//                1. Yes
-//                2. No
-//                """);
-//            System.out.println("Ваш выбор ?");
-//            switch (scanner.nextLine()) {
-//
-//                case "1": {
-//                    System.out.println("Введите сумму :");
-//                    BigDecimal requestedCredit = scanner.nextBigDecimal();
-//                    Managment.creditCar(currentUser, requestedCredit);
-//                    break;
-//                }
-//                case "2": {
-//                    System.out.println("Хорошо!");
-//                    break;
-//                }
-//                default: {
-//                    System.out.println("Некорректный выбор.");
-//                    break;
-//                }
-//            }
-//
-//            if (bigDecimal.compareTo(amount) >= 0) {
-//                bigDecimal = bigDecimal.subtract(amount);
-//                System.out.println("Новый баланс: " + bigDecimal);
-//                System.out.println("Ваша машина успешно забронирована!");
-//            } else {
-//                System.out.println("Недостаточно средств, даже после взятия кредита.");
-            }
         }
-        }
+
+    }
+}
 
 
 
