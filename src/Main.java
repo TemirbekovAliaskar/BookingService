@@ -5,12 +5,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-<<<<<<< HEAD
-
-
         System.out.println("test");
-=======
->>>>>>> 844ad37 (Nuryazin)
+
         Scanner scanner = new Scanner(System.in);
         User[] users = new User[0];
         User user = new User();
